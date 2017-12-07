@@ -1,46 +1,22 @@
-<%--
-  Copyright (c) 2002 by Phil Hanna
-  All rights reserved.
-  
-  You may study, use, modify, and distribute this
-  software for any purpose provided that this
-  copyright notice appears in all copies.
-  
-  This software is provided without warranty
-  either expressed or implied.
---%>
-<%@ page import="java.util.*" %>
-<html>
-   <head>
-      <title>shiwam test</title>
-   </head>
-   <body>
-      <h1>HTTP Request Headers Received</h1>
-      <table border="1" cellpadding="4" cellspacing="0">
-      <%
-         Enumeration eNames = request.getHeaderNames();
-         while (eNames.hasMoreElements()) {
-            String name = (String) eNames.nextElement();
-            String value = normalize(request.getHeader(name));
-      %>
-         <tr><td><%= name %></td><td><%= value %></td></tr>
-      <%
-         }
-      %>
-      </table>
-      <h2>Hello shiwam ! how are you ?</h2>
-   </body>
-</html>
-<%!
-   private String normalize(String value)
-   {
-      StringBuffer sb = new StringBuffer();
-      for (int i = 0; i < value.length(); i++) {
-         char c = value.charAt(i);
-         sb.append(c);
-         if (c == ';')
-            sb.append("<br>");
-      }
-      return sb.toString();
-   }
-%>
+<%@page import="javax.servlet.ServletInputStream,javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpUtils"%>
+<%@page import="java.io.BufferedReader,java.io.InputStreamReader,java.io.ByteArrayOutputStream"%>
+<%@page import="java.util.Enumeration,java.util.zip.GZIPOutputStream"%>
+<%@page import="java.net.URL,java.net.HttpURLConnection,java.io.IOException"%>
+
+ <%
+       ServletInputStream sis = request.getInputStream();
+       StringBuilder sb = new StringBuilder();
+       try {
+    	   BufferedReader reader = new BufferedReader(new InputStreamReader(sis));
+           reader.mark(10000);
+           String line;
+           do {
+               line = reader.readLine();
+               sb.append(line).append("\n");
+           } while (line != null);
+           reader.reset();
+       } catch(IOException e) {
+    	   System.out.println(sb);    
+       }
+       System.out.println(sb);
+ %>
