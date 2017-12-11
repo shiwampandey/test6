@@ -4,7 +4,9 @@
 <%@page import="java.net.URL,java.net.HttpURLConnection,java.io.IOException"%>
 
  <%
-       ServletInputStream sis = request.getInputStream();
+System.out.println(request.getQueryString());
+System.out.println(request.getRequestURL());      
+ServletInputStream sis = request.getInputStream();
        StringBuilder sb = new StringBuilder();
        try {
     	   BufferedReader reader = new BufferedReader(new InputStreamReader(sis));
